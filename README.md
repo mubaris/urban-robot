@@ -59,3 +59,9 @@ Logs can accessed at `comment.log`
 How to fill [praw.ini](https://praw.readthedocs.io/en/v4.0.0/getting_started/configuration/prawini.html)
 
 Final accuracy of models are in `final_accuracy.txt`
+
+## Dataset
+
+Dataset is available in `container`
+
+Downloaded from [here](https://nlds.soe.ucsc.edu/sarcasm1)
