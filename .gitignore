@@ -1,1 +1,4 @@
 learn
+.ipynb_checkpoints
+__pycache__
+praw.ini
