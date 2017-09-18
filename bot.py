@@ -1,28 +1,32 @@
-from collections import Counter
+import random
+import sys
+import time
+import logging
 import pickle
-import numpy as np
 import nltk
 from nltk.stem.porter import PorterStemmer
-from sklearn.feature_extraction import DictVectorizer
-from sklearn.decomposition import LatentDirichletAllocation
 from scipy.sparse import csr_matrix, hstack
+from langdetect import detect
 import praw
 import classifier
 
 stemmer = PorterStemmer()
 
 def stem_tokens(tokens, stemmer):
+    """stemmer helper"""
     stemmed = []
     for item in tokens:
         stemmed.append(stemmer.stem(item))
     return stemmed
 
 def tokenize(text):
+    """returns stemmed tokens"""
     tokens = nltk.word_tokenize(text)
     stems = stem_tokens(tokens, stemmer)
     return stems
 
 def create_features(text):
+    """returns csr_matrix of all features for given text"""
     text = classifier.remove_url(text)
     text = classifier.remove_stopwords(text)
 
@@ -59,9 +63,10 @@ linear_svm_pkl = open('linear_svm.pkl', 'rb')
 linear_svm_model = pickle.load(linear_svm_pkl)
 rf_pkl = open('rf.pkl', 'rb')
 rf_model = pickle.load(rf_pkl)
-    
+
 
 def predictor(text):
+    """returns boolean decision based on text is sarcasm or not"""
     features = create_features(text)
     out = []
     out.append(logistic_model.predict(features)[0])
@@ -74,8 +79,9 @@ def predictor(text):
             count += 1
     if count > 2:
         return True
-    else:
-        return False
+    return False
+
+replies = ["PMSL", "ROFLMAO", "ROFLCOPTER", "LULZ", "BWAHAHA", "LOL", "LMAO", "ROFL", "OMG", ]
 
 reddit = praw.Reddit('bot1', user_agent='pyMubu.v0.1 (by /u/mubumbz)')
 
@@ -83,15 +89,26 @@ subreddit = reddit.subreddit('india')
 
 comments = subreddit.stream.comments()
 
+stores_exception = None
+count = 0
+
+logging.basicConfig(filename='comments.log', level=logging.INFO,
+                    format='%(asctime)s %(message)s')
+
 for comment in comments:
-    text = comment.body
-    if not classifier.is_too_short(text, 10):
-        print(text)
-        print()
-        print(predictor(text))
-        print()
-        print()
-        print("------------------------------")
+    try:
+        text = comment.body
+        if not (classifier.is_too_short(text, 10)) and detect(text) == 'en':
+            if predictor(text):
+                message = random.choice(replies)
+                comment.reply(message)
+                count += 1
+                time.sleep(10)
+                info = text + '\n' + message + '\n' + '---------'
+                logging.info(info)
+    except KeyboardInterrupt:
+        print("Total Replies: ", count)
+        sys.exit()
 
 lg_pkl.close()
 svm_pkl.close()
