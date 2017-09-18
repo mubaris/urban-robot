@@ -178,7 +178,7 @@ if __name__ == "__main__":
     predict = logistic_clf.predict(final_test)
     pickle.dump(logistic_clf, lg_pkl)
     lg_pkl.close()
-    print(accuracy_score(y_test, predict))
+    print('Logistic = ', accuracy_score(y_test, predict))
 
     svm_pkl_file = 'svm.pkl'
     svm_pkl = open(svm_pkl_file, 'wb')
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     predict = svm_clf.predict(final_test)
     pickle.dump(svm_clf, svm_pkl)
     svm_pkl.close()
-    print(accuracy_score(y_test, predict))
+    print('SVM = ', accuracy_score(y_test, predict))
 
     linear_svm_pkl_file = 'linear_svm.pkl'
     linear_svm_pkl = open(linear_svm_pkl_file, 'wb')
@@ -200,7 +200,7 @@ if __name__ == "__main__":
     predict = linear_svm_clf.predict(final_test)
     pickle.dump(linear_svm_clf, linear_svm_pkl)
     linear_svm_pkl.close()
-    print(accuracy_score(y_test, predict))
+    print('lSVM = ', accuracy_score(y_test, predict))
 
     rf_pkl_file = 'rf.pkl'
     rf_pkl = open(rf_pkl_file, 'wb')
@@ -211,4 +211,4 @@ if __name__ == "__main__":
     predict = rf_clf.predict(final_test)
     pickle.dump(rf_clf, rf_pkl)
     rf_pkl.close()
-    print(accuracy_score(y_test, predict))
+    print('RF = ', accuracy_score(y_test, predict))
