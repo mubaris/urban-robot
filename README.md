@@ -1,5 +1,7 @@
 # Urban Robot
 
+![Urban Robot](ub.png)
+
 Reddit bot which replies to sarcastic comments
 
 
