@@ -17,6 +17,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.svm import SVC, LinearSVC
 from sklearn.ensemble import RandomForestClassifier
 
+
+
 def remove_url(text):
     """returns text without the url"""
     pattern = "((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w.,@?^=%&:\/~+#-])?"
@@ -102,6 +104,14 @@ def get_pos_features(arr):
         out = np.append(out, pos_tags)
     return out
 
+def print_result(logistic_score, svm_score, linear_svm_score, random_forest_score):
+    f = open('accuracy.txt', 'w')
+    f.write('Logistic = ' + str(logistic_score)+"\n")
+    f.write('SVM = ' + str(svm_score)+"\n")
+    f.write('lSVM = ' + str(linear_svm_score)+"\n")
+    f.write('RF = ' + str(random_forest_score)+"\n")
+    f.close()
+
 if __name__ == "__main__":
 
     # Getting Dataset
@@ -119,7 +129,7 @@ if __name__ == "__main__":
                 y = np.append(y, 'notsarc')
             else:
                 y = np.append(y, 'sarc')
-    
+
     # Splitting dataset in to training ans testing set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
@@ -178,7 +188,8 @@ if __name__ == "__main__":
     predict = logistic_clf.predict(final_test)
     pickle.dump(logistic_clf, lg_pkl)
     lg_pkl.close()
-    print('Logistic = ', accuracy_score(y_test, predict))
+    logistic_score = accuracy_score(y_test, predict)
+    print('Logistic = ', logistic_score)
 
     svm_pkl_file = 'svm.pkl'
     svm_pkl = open(svm_pkl_file, 'wb')
@@ -189,7 +200,8 @@ if __name__ == "__main__":
     predict = svm_clf.predict(final_test)
     pickle.dump(svm_clf, svm_pkl)
     svm_pkl.close()
-    print('SVM = ', accuracy_score(y_test, predict))
+    svm_score = accuracy_score(y_test, predict)
+    print('SVM = ', svm_score)
 
     linear_svm_pkl_file = 'linear_svm.pkl'
     linear_svm_pkl = open(linear_svm_pkl_file, 'wb')
@@ -200,7 +212,8 @@ if __name__ == "__main__":
     predict = linear_svm_clf.predict(final_test)
     pickle.dump(linear_svm_clf, linear_svm_pkl)
     linear_svm_pkl.close()
-    print('lSVM = ', accuracy_score(y_test, predict))
+    linear_svm_score = accuracy_score(y_test, predict)
+    print('lSVM = ', linear_svm_score)
 
     rf_pkl_file = 'rf.pkl'
     rf_pkl = open(rf_pkl_file, 'wb')
@@ -211,4 +224,7 @@ if __name__ == "__main__":
     predict = rf_clf.predict(final_test)
     pickle.dump(rf_clf, rf_pkl)
     rf_pkl.close()
-    print('RF = ', accuracy_score(y_test, predict))
+    random_forest_score = accuracy_score(y_test, predict)
+    print('RF = ', random_forest_score)
+
+    print_result(logistic_score, svm_score, linear_svm_score, random_forest_score)
