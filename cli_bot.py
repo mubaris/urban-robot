@@ -9,8 +9,21 @@ from scipy.sparse import csr_matrix, hstack
 from langdetect import detect
 import praw
 import classifier
+from termcolor import colored
 
 stemmer = PorterStemmer()
+
+class color:
+   PURPLE = '\033[95m'
+   CYAN = '\033[96m'
+   DARKCYAN = '\033[36m'
+   BLUE = '\033[94m'
+   GREEN = '\033[92m'
+   YELLOW = '\033[93m'
+   RED = '\033[91m'
+   BOLD = '\033[1m'
+   UNDERLINE = '\033[4m'
+   END = '\033[0m'
 
 def stem_tokens(tokens, stemmer):
     """stemmer helper"""
@@ -100,12 +113,27 @@ for comment in comments:
         text = comment.body
         if not (classifier.is_too_short(text, 10)) and detect(text) == 'en':
             if predictor(text):
-                message = random.choice(replies)
-                comment.reply(message)
-                count += 1
-                time.sleep(120)
-                info = text + '\n' + message + '\n' + '---------'
-                logging.info(info)
+                print(colored("Comment => ", 'magenta')+ colored(text, 'cyan'))
+                wish = input("Do " + color.BOLD + "you" + color.END + " wish to respond? [y/n] ")
+                if wish.lower().startswith('y'):
+                    message = input("Enter the reply: ")
+                    print(colored("Replying with: ", "yellow") + colored(message, "green"))
+                    comment.reply(message)
+                    count += 1
+                    info = text + '\n' + message + '\n' + '---------'
+                    logging.info(info)
+                    time.sleep(120)
+                else:
+                    wish2 = input("Would you like the " + color.BOLD + "bot" + color.END + " to respond? [y/n] ")
+                    if wish2.lower().startswith('y'):
+                        message = random.choice(replies)
+                        print(colored("Replying with: ", "yellow") + colored(message, "green"))
+                        comment.reply(message)
+                        count += 1
+                        info = text + '\n' + message + '\n' + '---------'
+                        logging.info(info)
+                        time.sleep(120)
+                print()
     except KeyboardInterrupt:
         print("\nTotal Replies: ", count)
         sys.exit()

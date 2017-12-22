@@ -44,6 +44,7 @@ If a comment is predicted as 'sarcastic' by 3 out 4 models, it is treated as sar
 
 * `classifier.py` - Training and Testing Models
 * `bot.py` - Reddit Bot
+* `cli_bot.py` - A Command Line Interactive Interface for the Reddit Bot
 * `main.ipynb` - iPython Notebook led to the final model hypothesis
 
 ## Running
@@ -52,7 +53,9 @@ If a comment is predicted as 'sarcastic' by 3 out 4 models, it is treated as sar
 
 2. Run `classifier.py` with Python 3(Optional) or use pretrained models
 
-3. Run `bot.py` with Python 3
+3. Run `bot.py` with Python 3 for the automated Reddit Bot
+
+4. Run `cli_bot.py` with Python 3 for an interactive version of the Reddit Bot.
 
 That's it.
 
