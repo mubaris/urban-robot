@@ -103,11 +103,11 @@ for comment in comments:
                 message = random.choice(replies)
                 comment.reply(message)
                 count += 1
-                time.sleep(10)
+                time.sleep(120)
                 info = text + '\n' + message + '\n' + '---------'
                 logging.info(info)
     except KeyboardInterrupt:
-        print("Total Replies: ", count)
+        print("\nTotal Replies: ", count)
         sys.exit()
 
 lg_pkl.close()
